@@ -5,24 +5,24 @@ RUN apk add --no-cache build-base autoconf linux-headers
 WORKDIR /app/openssl1.0
 
 RUN wget -qO- https://github.com/openssl/openssl/releases/download/OpenSSL_1_0_2u/openssl-1.0.2u.tar.gz | tar -xz --strip-components=1 &&\
-    ./config shared --prefix=/opt/openssl1.0/ --openssldir=/opt/openssl1.0/ enable-ec_nistp_64_gcc_128 &&\
+    ./config shared no-man no-tests --prefix=/opt/openssl1.0/ --openssldir=/opt/openssl1.0/ enable-ec_nistp_64_gcc_128 &&\
     make depend &&\
-    make &&\
+    make -j$(nproc) &&\
     make install
 
 WORKDIR /app/openssl1.1
 
 RUN wget -qO- https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1w/openssl-1.1.1w.tar.gz | tar -xz --strip-components=1 &&\
-    ./config shared --prefix=/opt/openssl1.1/ --openssldir=/opt/openssl1.1/ enable-ec_nistp_64_gcc_128 &&\
+    ./config shared no-tests --prefix=/opt/openssl1.1/ --openssldir=/opt/openssl1.1/ enable-ec_nistp_64_gcc_128 &&\
     make depend &&\
-    make &&\
-    make install
+    make -j$(nproc) &&\
+    make install_sw install_ssldirs
 
 WORKDIR /app/xml
 
 RUN wget -qO- https://download.gnome.org/sources/libxml2/2.7/libxml2-2.7.6.tar.xz | tar xJ --strip-components=1 &&\
-    ./configure --prefix=/opt/libxml2/ --without-threads &&\
-    make -j16 &&\
+    ./configure --prefix=/opt/libxml2/ --without-threads --build=x86_64-linux-gnu --host=$TARGETPLATFORM &&\
+    make -j$(nproc) &&\
     make install
 
 WORKDIR /app/curl7
@@ -46,7 +46,7 @@ RUN wget -qO- https://curl.se/download/curl-7.88.1.tar.gz | tar xz --strip-compo
         --without-libidn2 \
         --without-quiche \
         LDFLAGS="-Wl,-rpath,/opt/openssl1.0/lib" &&\
-    make -j16 &&\
+    make -j$(nproc) &&\
     make install
 
 WORKDIR /app/curl8
@@ -70,7 +70,7 @@ RUN wget -qO- https://curl.se/download/curl-8.17.0.tar.gz | tar xz --strip-compo
         --without-libidn2 \
         --without-quiche \
         LDFLAGS="-Wl,-rpath,/opt/openssl1.1/lib" &&\
-    make -j16 &&\
+    make -j$(nproc) &&\
     make install
 
 FROM alpine:3.20
