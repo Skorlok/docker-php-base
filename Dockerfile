@@ -78,5 +78,3 @@ FROM alpine:3.20
 COPY --from=base /opt/ /opt/
 
 RUN wget -O /etc/ssl/certs/ca-certificates.crt https://curl.se/ca/cacert.pem
-
-RUN apk add --no-cache build-base autoconf libpng-dev
