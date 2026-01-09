@@ -73,8 +73,17 @@ RUN wget -qO- https://curl.se/download/curl-8.17.0.tar.gz | tar xz --strip-compo
     make -j$(nproc) &&\
     make install
 
-FROM alpine:3.20
+RUN strip /opt/openssl1.0/lib/libcrypto.so.1.0.0 /opt/openssl1.0/lib/libssl.so.1.0.0
+RUN strip /opt/openssl1.1/lib/libcrypto.so.1.1 /opt/openssl1.1/lib/libssl.so.1.1
+RUN strip /opt/curl7/lib/libcurl.so.4
+RUN strip /opt/curl8/lib/libcurl.so.4
+
+RUN if [ "$TARGETARCH" == "amd64" ]; then \
+        strip /opt/libxml2/lib/libxml2.so.2; \
+    else \
+        touch /opt/libxml2/lib/libxml2.so.2; \
+    fi
+
+FROM scratch
 
 COPY --from=base /opt/ /opt/
-
-RUN wget -O /etc/ssl/certs/ca-certificates.crt https://curl.se/ca/cacert.pem
