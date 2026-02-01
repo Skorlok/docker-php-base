@@ -2,8 +2,6 @@ FROM alpine:3.20 AS base
 
 RUN apk add --no-cache build-base autoconf linux-headers
 
-ARG TARGETARCH
-
 WORKDIR /app/openssl1.0
 
 RUN wget -qO- https://github.com/openssl/openssl/releases/download/OpenSSL_1_0_2u/openssl-1.0.2u.tar.gz | tar -xz --strip-components=1 &&\
@@ -19,14 +17,6 @@ RUN wget -qO- https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1
     make depend &&\
     make -j$(nproc) &&\
     make install_sw install_ssldirs
-
-WORKDIR /app/xml
-
-RUN wget -qO- https://download.gnome.org/sources/libxml2/2.7/libxml2-2.7.6.tar.xz | tar xJ --strip-components=1 &&\
-    if [ "$TARGETARCH" = "arm64" ]; then CONFIG_FLAGS="--host=aarch64-unknown-linux-gnu --build=aarch64-unknown-linux-gnu"; else CONFIG_FLAGS=""; fi &&\
-    ./configure --prefix=/opt/libxml2/ --without-threads $CONFIG_FLAGS &&\
-    make -j$(nproc) &&\
-    make install
 
 WORKDIR /app/curl7
 
@@ -56,7 +46,6 @@ RUN strip /opt/openssl1.0/lib/libcrypto.so.1.0.0 /opt/openssl1.0/lib/libssl.so.1
 RUN strip /opt/openssl1.1/lib/libcrypto.so.1.1 /opt/openssl1.1/lib/libssl.so.1.1
 RUN strip /opt/curl7/lib/libcurl.so.4
 RUN strip /opt/curl8/lib/libcurl.so.4
-RUN strip /opt/libxml2/lib/libxml2.so.2
 
 FROM scratch
 
