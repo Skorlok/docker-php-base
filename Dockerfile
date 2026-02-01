@@ -34,20 +34,8 @@ RUN wget -qO- https://curl.se/download/curl-7.88.1.tar.gz | tar xz --strip-compo
     ./configure --prefix=/opt/curl7\
         --with-openssl=/opt/openssl1.0\
         --with-ca-path=/etc/ssl/certs\
-        --disable-ldap \
-        --disable-ldaps \
-        --disable-rtsp \
-        --disable-dict \
-        --disable-telnet \
-        --disable-tftp \
-        --disable-pop3 \
-        --disable-imap \
-        --disable-smtp \
-        --disable-gopher \
-        --disable-mqtt \
         --without-libpsl \
         --without-libidn2 \
-        --without-quiche \
         LDFLAGS="-Wl,-rpath,/opt/openssl1.0/lib" &&\
     make -j$(nproc) &&\
     make install
@@ -58,20 +46,8 @@ RUN wget -qO- https://curl.se/download/curl-8.17.0.tar.gz | tar xz --strip-compo
     ./configure --prefix=/opt/curl8\
         --with-openssl=/opt/openssl1.1\
         --with-ca-path=/etc/ssl/certs\
-        --disable-ldap \
-        --disable-ldaps \
-        --disable-rtsp \
-        --disable-dict \
-        --disable-telnet \
-        --disable-tftp \
-        --disable-pop3 \
-        --disable-imap \
-        --disable-smtp \
-        --disable-gopher \
-        --disable-mqtt \
         --without-libpsl \
         --without-libidn2 \
-        --without-quiche \
         LDFLAGS="-Wl,-rpath,/opt/openssl1.1/lib" &&\
     make -j$(nproc) &&\
     make install
