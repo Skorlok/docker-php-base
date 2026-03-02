@@ -23,7 +23,7 @@ WORKDIR /app/curl7
 RUN wget -qO- https://curl.se/download/curl-7.88.1.tar.gz | tar xz --strip-components=1 &&\
     ./configure --prefix=/opt/curl7\
         --with-openssl=/opt/openssl1.0\
-        --with-ca-path=/etc/ssl/certs\
+        --with-ca-bundle=/etc/ssl/cert.pem\
         --without-libpsl \
         --without-libidn2 \
         LDFLAGS="-Wl,-rpath,/opt/openssl1.0/lib" &&\
@@ -35,7 +35,7 @@ WORKDIR /app/curl8
 RUN wget -qO- https://curl.se/download/curl-8.17.0.tar.gz | tar xz --strip-components=1 &&\
     ./configure --prefix=/opt/curl8\
         --with-openssl=/opt/openssl1.1\
-        --with-ca-path=/etc/ssl/certs\
+        --with-ca-bundle=/etc/ssl/cert.pem\
         --without-libpsl \
         --without-libidn2 \
         LDFLAGS="-Wl,-rpath,/opt/openssl1.1/lib" &&\
