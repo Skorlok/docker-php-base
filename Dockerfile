@@ -26,6 +26,7 @@ RUN wget -qO- https://curl.se/download/curl-7.88.1.tar.gz | tar xz --strip-compo
         --with-ca-bundle=/etc/ssl/cert.pem\
         --without-libpsl \
         --without-libidn2 \
+        --disable-manual \
         LDFLAGS="-Wl,-rpath,/opt/openssl1.0/lib" &&\
     make -j$(nproc) &&\
     make install
@@ -38,6 +39,7 @@ RUN wget -qO- https://curl.se/download/curl-8.17.0.tar.gz | tar xz --strip-compo
         --with-ca-bundle=/etc/ssl/cert.pem\
         --without-libpsl \
         --without-libidn2 \
+        --disable-manual \
         LDFLAGS="-Wl,-rpath,/opt/openssl1.1/lib" &&\
     make -j$(nproc) &&\
     make install
@@ -49,7 +51,8 @@ RUN wget -qO- https://curl.se/download/curl-8.19.0.tar.gz | tar xz --strip-compo
         --with-openssl\
         --with-ca-bundle=/etc/ssl/cert.pem\
         --without-libpsl \
-        --without-libidn2 &&\
+        --without-libidn2 \
+        --disable-manual &&\
     make -j$(nproc) &&\
     make install
 
