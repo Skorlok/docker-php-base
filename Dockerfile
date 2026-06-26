@@ -46,7 +46,7 @@ RUN wget -qO- https://curl.se/download/curl-8.17.0.tar.gz | tar xz --strip-compo
 	
 WORKDIR /app/curlssl3
 
-RUN wget -qO- https://curl.se/download/curl-8.20.0.tar.gz | tar xz --strip-components=1 &&\
+RUN wget -qO- https://curl.se/download/curl-8.21.0.tar.gz | tar xz --strip-components=1 &&\
     ./configure --prefix=/opt/curlssl3\
         --with-openssl\
         --with-ca-bundle=/etc/ssl/cert.pem\
