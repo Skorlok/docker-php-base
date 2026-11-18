@@ -1,6 +1,6 @@
 FROM alpine:latest AS base
 
-RUN apk add --no-cache build-base autoconf linux-headers openssl-dev
+RUN apk add --no-cache build-base autoconf linux-headers openssl-dev perl bison flex
 
 ARG TARGETARCH
 
@@ -66,12 +66,26 @@ RUN wget -qO- https://curl.se/download/curl-8.23.0.tar.gz | tar xz --strip-compo
 	make -j$(nproc) &&\
 	make install
 
+# libpq sans SSL : aucune dependance hors musl, utilisable par toutes les versions de PHP
+WORKDIR /app/libpq
+
+RUN wget -qO- https://ftp.postgresql.org/pub/source/v18.7/postgresql-18.7.tar.gz | tar xz --strip-components=1 &&\
+	./configure --prefix=/opt/libpq\
+		--without-openssl\
+		--without-icu\
+		--without-readline\
+		--without-zlib &&\
+	make -C src/interfaces/libpq -j$(nproc) install &&\
+	make -C src/include install &&\
+	make -C src/bin/pg_config install
+
 RUN strip /opt/openssl1.0/lib/libcrypto.so.1.0.0 /opt/openssl1.0/lib/libssl.so.1.0.0
 RUN strip /opt/openssl1.1/lib/libcrypto.so.1.1 /opt/openssl1.1/lib/libssl.so.1.1
 RUN strip /opt/libxml2/lib/libxml2.so.2
 RUN strip /opt/curl7/lib/libcurl.so.4
 RUN strip /opt/curl8/lib/libcurl.so.4
 RUN strip /opt/curlssl3/lib/libcurl.so.4
+RUN strip /opt/libpq/lib/libpq.so.5
 
 FROM scratch
 
