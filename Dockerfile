@@ -66,7 +66,6 @@ RUN wget -qO- https://curl.se/download/curl-8.23.0.tar.gz | tar xz --strip-compo
 	make -j$(nproc) &&\
 	make install
 
-# libpq sans SSL : aucune dependance hors musl, utilisable par toutes les versions de PHP
 WORKDIR /app/libpq
 
 RUN wget -qO- https://ftp.postgresql.org/pub/source/v18.7/postgresql-18.7.tar.gz | tar xz --strip-components=1 &&\
